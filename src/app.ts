@@ -1,7 +1,14 @@
+import "reflect-metadata";
+import {createConnection} from "typeorm";
 import express from 'express';
 
 const app = express();
 
-app.listen(5000, () =>{
-    console.log("Server started....")
-});
+app.use(express.json());
+
+createConnection().then(() => {
+    app.listen(5000, () =>{
+        console.log("Server started....")
+    });
+}).catch(error => console.log(error));
+
