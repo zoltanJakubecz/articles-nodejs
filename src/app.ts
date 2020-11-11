@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import express from "express";
 import fileUpload from "express-fileupload";
-import { getArticles, createArticle } from "./controllers/article.controller";
+import { getArticles, createArticle, getArticle } from "./controllers/article.controller";
 import { uploadFile } from "./controllers/image.controller";
 import { createToken, renewToken } from "./controllers/token.controller";
 
@@ -14,6 +14,7 @@ app.use(express.static('public'));
 
 app.get('/', getArticles);
 app.post('/', createArticle);
+app.get('/:id', getArticle);
 app.post('/upload', uploadFile);
 app.post('/token/new/:platform', createToken);
 app.put('/token/renew/:token', renewToken);
