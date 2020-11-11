@@ -13,3 +13,5 @@ export const createArticle = async (req: Request, res: Response): Promise<Respon
     const result = await getRepository(Article).save(newArticle);
     return res.json(result);
 }
+
+
