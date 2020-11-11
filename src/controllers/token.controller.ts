@@ -3,6 +3,8 @@ import { getRepository } from "typeorm";
 import { Token, Platform } from "../entity/Token";
 import { v4 as uuidv4 } from 'uuid';
 
+const MAX_TRY = 5;
+
 export const createToken = async (req: Request, res: Response): Promise<Response> => {
 
     const values:string[] = Object.values(Platform);
@@ -14,7 +16,7 @@ export const createToken = async (req: Request, res: Response): Promise<Response
     const newToken: Token = new Token();
     newToken.token = `${uuidv4()}:${req.params.platform}`;
     newToken.platform = req.params.platform as Platform;
-    newToken.remaining = 5;
+    newToken.remaining = MAX_TRY;
     await getRepository(Token).save(newToken);
     return res.status(200).json({
         token: newToken.token,
@@ -22,3 +24,11 @@ export const createToken = async (req: Request, res: Response): Promise<Response
     });
 }
 
+export const renewToken = async (req: Request, res: Response): Promise<Response> => {
+    const user = await getRepository(Token).findOne(req.params.token);
+    user.remaining = MAX_TRY;
+    await getRepository(Token).save(user);
+    return res.status(200).json({
+        remaining: user.remaining
+    });
+}
