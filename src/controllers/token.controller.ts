@@ -25,10 +25,10 @@ export const createToken = async (req: Request, res: Response): Promise<Response
 }
 
 export const renewToken = async (req: Request, res: Response): Promise<Response> => {
-    const user = await getRepository(Token).findOne(req.params.token);
-    user.remaining = MAX_TRY;
-    await getRepository(Token).save(user);
+    const token = await getRepository(Token).findOne(req.params.token);
+    token.remaining = MAX_TRY;
+    await getRepository(Token).save(token);
     return res.status(200).json({
-        remaining: user.remaining
+        remaining: token.remaining
     });
 }
