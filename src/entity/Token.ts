@@ -10,7 +10,7 @@ export enum Platform {
 export class Token {
     
     @PrimaryColumn("uuid")
-    token: number;
+    token: string;
 
     @Column()
     platform: Platform;
