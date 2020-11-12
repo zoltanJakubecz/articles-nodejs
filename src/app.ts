@@ -14,11 +14,13 @@ app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.static('public'));
 
-app.get('/', getArticles);
-app.post('/', createArticle);
-app.get('/:id', getArticle);
+app.get('/articles', getArticles);
+app.post('/articles', createArticle);
+app.get('/articles/:id', getArticle);
+
 app.post('/upload', uploadFile);
-app.post('/token/new/:platform', createToken);
+
+app.post('/token/:platform', createToken);
 app.put('/token/renew', renewToken);
 
 createConnection().then(() => {
