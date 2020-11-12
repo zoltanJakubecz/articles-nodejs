@@ -4,14 +4,23 @@ import { Article } from "../entity/Article";
 import { Token } from "../entity/Token";
 
 export const getArticles = async (req: Request, res: Response): Promise<Response> => {
-    const articles = await getRepository(Article).find();
-    return res.status(200).json(articles);
+    const dbSize: number = await getRepository(Article).createQueryBuilder("article").getCount();
+    const articles: Article[] = await getRepository(Article).createQueryBuilder("article").limit(req.body.pageSize).offset((req.body.page - 1) * req.body.pageSize).getMany();
+    return res.status(200).json({
+        list: articles,
+        meta: {
+            pageSize: req.body.pageSize,
+            count: dbSize,
+            pageCount: Math.ceil(dbSize / req.body.pageSize),
+            page: req.body.page
+        }
+    });
 }
 
 
 export const createArticle = async (req: Request, res: Response): Promise<Response> => {
-    const newArticle = await getRepository(Article).create(req.body);
-    const result = await getRepository(Article).save(newArticle);
+    const newArticle: Article[] = await getRepository(Article).create(req.body);
+    const result: Article[] = await getRepository(Article).save(newArticle);
     return res.status(200).json(result);
 }
 
