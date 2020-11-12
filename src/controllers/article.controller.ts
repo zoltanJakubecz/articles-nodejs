@@ -17,8 +17,10 @@ export const createArticle = async (req: Request, res: Response): Promise<Respon
 
 
 export const getArticle = async (req: Request, res: Response): Promise<Response> => {
-    console.log(req.body.token);
-    const token = await getRepository(Token).findOne(req.body.token);
+    const { cookies } = req;
+    let token: Token;
+    console.log(cookies);
+    if("token" in cookies) token = await getRepository(Token).findOne(cookies.token);
     if(token && token.remaining > 0) {
         token.remaining -= 1;
         await getRepository(Token).save(token); 

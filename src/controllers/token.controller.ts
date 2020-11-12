@@ -26,7 +26,6 @@ export const createToken = async (req: Request, res: Response): Promise<Response
 
 export const renewToken = async (req: Request, res: Response): Promise<Response> => {
     const { cookies } = req;
-    console.log(cookies.token);
     const token = await getRepository(Token).findOne(cookies.token);
     token.remaining = MAX_TRY;
     await getRepository(Token).save(token);
