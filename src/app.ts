@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import express from "express";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import {router as articlesRoute} from "./routes/articlesRoute";
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.static('public'));
+app.use(cors());
 
 app.use("/api/articles", articlesRoute);
 app.use("/api/tokens", tokenRouter);
