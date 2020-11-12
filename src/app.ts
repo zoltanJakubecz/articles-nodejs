@@ -3,9 +3,9 @@ import { createConnection } from "typeorm";
 import express from "express";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
-import { getArticles, createArticle, getArticle } from "./controllers/article.controller";
-import { uploadFile } from "./controllers/image.controller";
-import { createToken, renewToken } from "./controllers/token.controller";
+import {router as articlesRoute} from "./routes/articlesRoute";
+import { router as tokenRouter } from "./routes/tokensRoute";
+import { router as fileRouter } from "./routes/filesRoute";
 
 const app = express();
 
@@ -14,14 +14,10 @@ app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.static('public'));
 
-app.get('/articles', getArticles);
-app.post('/articles', createArticle);
-app.get('/articles/:id', getArticle);
+app.use("/api/articles", articlesRoute);
+app.use("/api/tokens", tokenRouter);
+app.use("/api/files", fileRouter);
 
-app.post('/upload', uploadFile);
-
-app.post('/token/:platform', createToken);
-app.put('/token/renew', renewToken);
 
 createConnection().then(() => {
     app.listen(5000, () =>{
