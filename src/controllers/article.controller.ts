@@ -4,6 +4,11 @@ import { Article } from "../entity/Article";
 import { Token } from "../entity/Token";
 
 export const getArticles = async (req: Request, res: Response): Promise<Response> => {
+    if(isNaN(req.body.pageSize) || isNaN(req.body.page)) {
+        return res.status(404).json({
+            message: "Data must be number"
+        });
+    }
     const dbSize: number = await getRepository(Article).createQueryBuilder("article").getCount();
     const articles: Article[] = await getRepository(Article).createQueryBuilder("article").limit(req.body.pageSize).offset((req.body.page - 1) * req.body.pageSize).getMany();
     return res.status(200).json({
