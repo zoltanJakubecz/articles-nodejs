@@ -23,31 +23,63 @@
     ],
     "paths": {
         "/api/articles": {
-            "parameters": [
-                {
-                    "name": "body",
-                    "in": "body",
-                    "required": true,
-                    "description": "How many articles on one page",
-                    "type": "string",
-                    "schema": {
-                        "$ref": "#/definitions/Paging"
-                    }
-                }
-            ],
+            
             "get": {
                 "tags": [
                     "Articles"
+                ],
+                "requestBody": {
+                    "description": "Article Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Paging"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
                 ],
                 "summary": "Get paginated articles in system",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Paging"
+                            "$ref": "#/definitions/PagingResponse"
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                
+                "summary": "Create a new article in system",
+                "requestBody": {
+                    "description": "Article Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/NewArticle"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }    
             }
         }
     },
@@ -60,6 +92,60 @@
                 },
                 "page": {
                     "type": "integer"
+                }
+            }
+        },
+        "Article": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "NewArticle": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "PagingResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": "#/definitions/Article"
+                },
+                "meta": {
+                    "pageSize": {
+                        "type": "integer"
+                    },
+                    "count": {
+                        "type": "integer"
+                    },
+                    "pageCount": {
+                        "type": "integer"
+                    },
+                    "page": {
+                        "type": "integer"
+                    }
                 }
             }
         }
