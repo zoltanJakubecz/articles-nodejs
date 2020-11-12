@@ -26,7 +26,13 @@ export const createToken = async (req: Request, res: Response): Promise<Response
 
 export const renewToken = async (req: Request, res: Response): Promise<Response> => {
     const { cookies } = req;
-    const token = await getRepository(Token).findOne(cookies.token);
+    let token: Token;
+    if("token" in cookies) token = await getRepository(Token).findOne(cookies.token);
+    if(!token){
+        return res.status(404).json({
+            message: "Token not found"
+        })
+    }
     token.remaining = MAX_TRY;
     await getRepository(Token).save(token);
     return res.status(200).json({
