@@ -6,6 +6,7 @@
       ],
       "target": "es6",
       "module": "commonjs",
+      "resolveJsonModule": true,
       "moduleResolution": "node",
       "outDir": "./build",
       "rootDir": "./src",
