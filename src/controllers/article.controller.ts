@@ -33,7 +33,6 @@ export const createArticle = async (req: Request, res: Response): Promise<Respon
 export const getArticle = async (req: Request, res: Response): Promise<Response> => {
     const { cookies } = req;
     let token: Token;
-    console.log(cookies);
     if("token" in cookies) token = await getRepository(Token).findOne(cookies.token);
     if(token && token.remaining > 0) {
         token.remaining -= 1;
