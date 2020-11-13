@@ -3,8 +3,8 @@ import { createArticle, getArticle, getArticles } from "../controllers/article.c
 
 const router = Router();
 
-router.get('/', getArticles);
+router.get('/paginated', getArticles);
 router.post('/', createArticle);
 router.get('/:id', getArticle);
 
-export {router};
+export { router };
