@@ -17,6 +17,10 @@
         {
             "name": "Tokens",
             "description": "Token for access"
+        },
+        {
+            "name": "Files",
+            "description": "File handle"
         }
     ],
     "consumes": [
@@ -51,11 +55,15 @@
                 ],
                 "summary": "Get paginated articles in system",
                 "responses": {
+                    "description": "Paging Object",
                     "200": {
-                        "description": "OK",
+                        "description": "Object with the article list on the given page, posible page number, current page, all articles number ",
                         "schema": {
                             "$ref": "#/definitions/PagingResponse"
                         }
+                    },
+                    "404": {
+                        "description": "Data must be number"
                     }
                 }
             },
@@ -81,7 +89,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Gives back the stored article with its ID",
                         "schema": {
                             "$ref": "#/definitions/Article"
                         }
@@ -114,9 +122,10 @@
                         }
                     }
                 ],
+                "summary": "Get an article from system by the given ID",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Gives back the article by the given ID if valid token provided",
                         "schema": {
                             "$ref": "#/definitions/Article"
                         }
@@ -155,9 +164,10 @@
                         }
                     }
                 ],
+                "summary": "Create a token for the given platform",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Gives back a token for the given platform with 5 times access",
                         "schema": {
                             "$ref": "#/definitions/Token"
                         }
@@ -169,16 +179,43 @@
             }
         },
         "/api/tokens/renew": {
-            "put":{
+            "put": {
                 "tags": [
                     "Tokens"
                 ],
+                "summary": "Renews the given token with 5 times access",
                 "responses": {
                     "200": {
-                        "description": "5 accesses remaining"
+                        "description": "Resets accesses remaining to 5"
                     },
                     "404": {
                         "description": "Token not found"
+                    }
+                }
+            }
+        },
+        "/api/files/upload": {
+            "post": {
+                "tags":[
+                    "Files"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "body",
+                        "required": true,
+                        "description": "Image file upload",
+                        "type": "file"
+                    }
+                ],
+                "summary": "Upload image file to server",
+                "responses": {
+                    "200": {
+                        "description": "Gives the URL of the stored file"
+                        
+                    },
+                    "500": {
+                        "description": "Unsupported extension"
                     }
                 }
             }
