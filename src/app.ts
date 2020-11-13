@@ -21,10 +21,30 @@ app.use(fileUpload());
 app.use(express.static('public'));
 app.use(cors());
 
+const DisableTryItOutPlugin = function() {
+    return {
+      statePlugins: {
+        spec: {
+          wrapSelectors: {
+            allowTryItOutFor: () => () => false
+          }
+        }
+      }
+    }
+  }
+  
+  const options = {
+    swaggerOptions: {
+        plugins: [
+             DisableTryItOutPlugin
+        ]
+     }
+  };
+
 app.use("/api/articles", articlesRoute);
 app.use("/api/tokens", tokenRouter);
 app.use("/api/files", fileRouter);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument, options));
 
 
 createConnection().then(() => {
