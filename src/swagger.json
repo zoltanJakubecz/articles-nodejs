@@ -13,6 +13,10 @@
         {
             "name": "Articles",
             "description": "API for articles in the system"
+        },
+        {
+            "name": "Tokens",
+            "description": "Token for access"
         }
     ],
     "consumes": [
@@ -28,6 +32,9 @@
                 "tags": [
                     "Articles"
                 ],
+                "security": {
+                    "cookieAuth": []
+                },
                 "requestBody": {
                     "description": "Article Object",
                     "required": true,
@@ -81,9 +88,121 @@
                     }
                 }    
             }
+        },
+        "/api/articles/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the cat that we want to match",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the article ",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    },
+                    "404": {
+                        "description": "Access denied!"
+                    }
+                }
+            }
+        },
+        "/api/tokens/{platform}": {
+            "tags": [
+                "Tokens"
+            ],
+            "parameters": [
+                {
+                    "name": "platform",
+                    "in": "path",
+                    "required": true,
+                    "description": "Platform of the user",
+                    "type": "string"
+                }
+            ],
+            "post": {
+                "tags": [
+                    "Tokens"
+                ],
+                "parameters": [
+                    {
+                        "name": "platform",
+                        "in": "path",
+                        "required": true,
+                        "description": "Platform of the user",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        }
+                    },
+                    "404": {
+                        "description": "Unknown platform"
+                    }
+                }
+            }
+        },
+        "/api/tokens/renew": {
+            "put":{
+                "tags": [
+                    "Tokens"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "5 accesses remaining"
+                    },
+                    "404": {
+                        "description": "Token not found"
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "id": {
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string" 
+                },
+                "remaining": {
+                    "type": "integer"
+                }
+            }
+        },
         "Paging": {
             "type": "object",
             "properties": {
